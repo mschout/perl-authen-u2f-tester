@@ -3,6 +3,7 @@ package My::Test::Util;
 use strictures 2;
 use Crypt::PK::ECC;
 use File::Slurp qw(read_file);
+use IPC::System::Simple qw(system);
 
 sub generate_key {
     my ($self, $filename) = @_;
@@ -21,44 +22,14 @@ sub generate_key {
 sub generate_certificate {
     my ($self, $keyfile, $certfile) = @_;
 
-    my $subject = Crypt::OpenSSL::CA::X509_NAME->new(
-        C  => 'US',
-        O  => 'test-u2f-manufacturer',
-        ST => 'Texas',
-        CN => 'virtual-u2f');
+    my $tmpdir = Path::Tiny->tempdir;
 
-    my $issue = Crypt::OpenSSL::CA::X509_NAME->new(
-        C  => 'US',
-        O  => 'Test Untrustworthy CA Organization',
-        ST => 'Texas',
-        CN => 'Test Untrustworthy CA');
+    my $subject = '/C=US/O=Untrusted U2F Organization/ST=Texas/CN=virtual-u2f';
 
-    my $key = Crypt::OpenSSL::CA::PrivateKey->parse(scalar read_file($keyfile));
-
-    my $pubkey = $key->get_public_key;
-
-    my $x509 = Crypt::OpenSSL::CA::X509->new($pubkey);
-
-    $x509->set_serial('0x1');
-    $x509->set_subject_DN($subject);
-    $x509->set_issuer_DN($issue);
-
-    my $startyear = (gmtime)[5] + 1900;
-    my $endyear   = $startyear + 100;
-
-    my $before = $startyear . '0101000000Z';
-    my $after  = $endyear   . '0101000000Z';
-
-    $x509->set_notBefore($before);
-    $x509->set_notAfter($after);
-
-    my $pem = $x509->sign($key, 'sha256');
-
-    open my $fh, '>', $certfile;
-
-    print $fh $pem;
-
-    close $fh;
+    system qw(openssl req -x509 -days 365 -sha256),
+        '-subj', $subject,
+        '-key', $keyfile,
+        '-out', $certfile;
 }
 
 1;

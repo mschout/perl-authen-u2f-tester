@@ -5,7 +5,6 @@ use strictures 2;
 
 use Authen::U2F;
 use Crypt::Misc qw(write_rawfile);
-use Crypt::OpenSSL::CA;
 use Crypt::OpenSSL::X509;
 use Crypt::PK::ECC;
 use File::Slurp qw(read_file);
