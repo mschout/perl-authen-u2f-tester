@@ -1,6 +1,5 @@
 #!/usr/bin/env perl
 
-use lib 't/lib';
 use strictures 2;
 
 use Authen::U2F;
@@ -14,16 +13,10 @@ use Path::Tiny;
 use Test::Exception;
 use Test::More;
 
-use aliased 'My::Test::Util';
-
 use_ok 'Authen::U2F::Tester' or exit 1;
 
-my $tmpdir = Path::Tiny->tempdir;
-my $certfile = $tmpdir->child('cert.pem')->stringify;
-my $keyfile  = $tmpdir->child('key.pem')->stringify;
-
-Util->generate_key($keyfile);
-Util->generate_certificate($keyfile, $certfile);
+my $certfile = 't/ssl/cert.pem';
+my $keyfile  = 't/ssl/key.pem';
 
 my $pk = Crypt::PK::ECC->new($keyfile);
 isa_ok $pk, 'Crypt::PK::ECC';
