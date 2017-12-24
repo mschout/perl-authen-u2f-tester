@@ -50,6 +50,8 @@ sub is_success {
 
 __END__
 
+=for Pod::Coverage OK
+
 =head1 SYNOPSIS
 
  # This is used by successful tester U2F responses

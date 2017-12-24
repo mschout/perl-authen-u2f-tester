@@ -253,6 +253,8 @@ __PACKAGE__->meta->make_immutable;
 
 __END__
 
+=for Pod::Coverage OK DEVICE_INELIGIBLE
+
 =head1 SYNOPSIS
 
  my $tester = Authen::U2F::Tester->new(
