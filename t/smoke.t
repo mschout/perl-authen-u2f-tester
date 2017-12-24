@@ -14,6 +14,7 @@ use Test::Exception;
 use Test::More;
 
 use_ok 'Authen::U2F::Tester' or exit 1;
+use_ok 'Authen::U2F::Tester::Const' or exit 1;
 
 my $certfile = 't/ssl/cert.pem';
 my $keyfile  = 't/ssl/key.pem';
@@ -66,6 +67,13 @@ subtest register => sub {
             registration_data => $res->registration_data,
             client_data       => $res->client_data);
     };
+
+    # try to register again, should get device is ineligible
+    lives_ok { $res = $tester->register($app_id, $challenge, $handle) };
+
+    isa_ok $res, 'Authen::U2F::Tester::Error';
+
+    is $res->error_code, &Authen::U2F::Tester::Const::DEVICE_INELIGIBLE;
 };
 
 subtest sign => sub {
@@ -90,6 +98,13 @@ subtest sign => sub {
             signature_data => $res->signature_data,
             client_data    => $res->client_data);
     };
+
+    # device not registered
+    lives_ok { $res = $tester->sign($app_id, $challenge, substr($handle, 1)); };
+
+    isa_ok $res, 'Authen::U2F::Tester::Error';
+
+    is $res->error_code, &Authen::U2F::Tester::Const::DEVICE_INELIGIBLE;
 };
 
 done_testing;
