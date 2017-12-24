@@ -1,3 +1,4 @@
+# COPYRIGHT
 package Authen::U2F::Tester;
 
 # ABSTRACT: FIDO/U2F Authentication Tester

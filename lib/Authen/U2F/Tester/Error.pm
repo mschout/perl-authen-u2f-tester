@@ -1,7 +1,7 @@
 # COPYRIGHT
 package Authen::U2F::Tester::Error;
 
-# ABSTRACT: U2F Error Response
+# ABSTRACT: Authen::U2F::Tester Error Response
 
 use Moose;
 use MooseX::AttributeShortcuts;

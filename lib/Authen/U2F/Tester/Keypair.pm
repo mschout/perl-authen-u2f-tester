@@ -12,6 +12,15 @@ use Crypt::PK::ECC;
 use UUID::Tiny;
 use namespace::autoclean;
 
+=method new()
+
+=method new($keypair)
+
+Construct a new keypair object.  A L<Crypt::PK::ECC> object can be passed to
+the constructor.  Otherwise a new keypair will be generated on demand.
+
+=cut
+
 =method keypair(): Crypt::PK::ECC
 
 Gets the keypair for this object.  If a keypair was not passed to the
@@ -43,15 +52,6 @@ Get the private key (in C<DER> format) for this keypair.
 =cut
 
 has [qw(public_key private_key)] => (is => 'lazy', isa => 'Value');
-
-=method new()
-
-=method new($keypair)
-
-Construct a new keypair object.  A L<Crypt::PK::ECC> object can be passed to
-the constructor.  Otherwise a new keypair will be generated on demand.
-
-=cut
 
 single_arg 'keypair';
 
