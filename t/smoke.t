@@ -48,14 +48,6 @@ subtest register => sub {
         cid_pubkey => 'unused'
     };
 
-    my $request = {
-        type             => 'u2f_register_request',
-        appId            => $app_id,
-        registerRequests => [$client_data],
-        registeredKeys   => [],
-        timeoutSeconds   => 30
-    };
-
     my $res;
 
     lives_ok { $res = $tester->register($app_id, $challenge) };
