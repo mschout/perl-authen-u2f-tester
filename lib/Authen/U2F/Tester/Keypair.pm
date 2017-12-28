@@ -9,7 +9,6 @@ use MooseX::SingleArg;
 
 use strictures 2;
 use Crypt::PK::ECC;
-use UUID::Tiny;
 use namespace::autoclean;
 
 =method new()
@@ -29,15 +28,6 @@ constructor, a new key will be generated.
 =cut
 
 has keypair => (is => 'lazy', isa => 'Crypt::PK::ECC');
-
-=method handle(): string
-
-Get the handle for this keyapair.  Handles are randomly generated strings
-that uniquely identify the keypair.
-
-=cut
-
-has handle => (is => 'lazy', isa => 'Str');
 
 =method public_key(): scalar
 
@@ -69,10 +59,6 @@ sub _build_public_key {
 
 sub _build_private_key {
     shift->keypair->export_key_raw('private');
-}
-
-sub _build_handle {
-    UUID::Tiny::create_uuid(UUID::Tiny::UUID_RANDOM);
 }
 
 __PACKAGE__->meta->make_immutable;
