@@ -1,7 +1,7 @@
 # COPYRIGHT
 package Authen::U2F::Tester;
 
-# ABSTRACT: FIDO/U2F Authentication Tester
+# ABSTRACT: FIDO/U2F Authentication Test Client
 
 use Moose;
 
@@ -42,14 +42,11 @@ An L<Crypt::PK::ECC> object.
 An L<Crypt::OpenSSL::X509> object.
 
 In order to create and use the tester, you will need both an Elliptic Curve
-keypair, and a SSL X.509 certificate.  This can be done using some perl code
-(see C<t/lib/My/Test/Util.pm> in this dist for an example), or, using
-openssl:
+keypair, and a SSL X.509 certificate.  The key can be generated using OpenSSL:
 
  % openssl ecparam -name secp256r1 -genkey -noout -out key.pem
 
-Then this key can be used to generate a self signed X.509 certificate using
-openssl:
+Then this key can be used to generate a self signed X.509 certificate:
 
  % openssl req -key key.pem -x509 -days 3560 -sh256 \
      -subj '/C=US/ST=Texas/O=Untrusted U2F Org/CN=virtual-u2f' \
