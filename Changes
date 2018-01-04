@@ -1,6 +1,8 @@
 Revision history for Authen-U2F-Tester
 
 {{$NEXT}}
+    - rename tester keypar() accessor to key(). This is a bit less confusing as
+      its not a ::Tester::Keypair object, but a Crypt::PK::ECC object.
 
 0.01  2017-12-27
     - Initial release

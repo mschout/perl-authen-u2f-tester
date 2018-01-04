@@ -36,13 +36,13 @@ The location of the C<X.509> certificate file.
 Alternatively, the key and certificate can be passed in directly as objects:
 
 =for :list
-* keypair
+* key
 An L<Crypt::PK::ECC> object.
 * certificate
 An L<Crypt::OpenSSL::X509> object.
 
 In order to create and use the tester, you will need both an Elliptic Curve
-keypair, and a SSL X.509 certificate.  The key can be generated using OpenSSL:
+key, and a SSL X.509 certificate.  The key can be generated using OpenSSL:
 
  % openssl ecparam -name secp256r1 -genkey -noout -out key.pem
 
@@ -52,13 +52,16 @@ Then this key can be used to generate a self signed X.509 certificate:
      -subj '/C=US/ST=Texas/O=Untrusted U2F Org/CN=virtual-u2f' \
      -out cert.pem
 
-=method keypair(): Crypt::PK::ECC
+Note that this key is also used to encrypt key handles that the tester
+generates for registration requests.
 
-Get the private keypair for this tester.
+=method key(): Crypt::PK::ECC
+
+Get the key for this tester.
 
 =cut
 
-has keypair => (
+has key => (
     is       => 'ro',
     isa      => 'Crypt::PK::ECC',
     required => 1);
@@ -81,7 +84,7 @@ around BUILDARGS => sub {
         my %args = @_;
 
         if (my $keyfile = delete $args{key_file}) {
-            $args{keypair} = Crypt::PK::ECC->new($keyfile);
+            $args{key} = Crypt::PK::ECC->new($keyfile);
         }
 
         if (my $certfile = delete $args{cert_file}) {
@@ -137,7 +140,7 @@ sub register {
 
     # generate a new keypair for this application
     my $keypair = Authen::U2F::Tester::Keypair->new;
-    my $handle  = $self->keypair->encrypt($keypair->private_key, 'SHA256');
+    my $handle  = $self->key->encrypt($keypair->private_key, 'SHA256');
     my $cert    = $self->certificate->as_string(Crypt::OpenSSL::X509::FORMAT_ASN1);
 
     my %client_data = (
@@ -154,7 +157,7 @@ sub register {
         $handle,
         $keypair->public_key;
 
-    my $signature = $self->keypair->sign_hash(sha256($sign_data));
+    my $signature = $self->key->sign_hash(sha256($sign_data));
 
     my $response = pack 'a a65 C/a* a* a*',
         chr(0x05), $keypair->public_key, $handle, $cert, $signature;
@@ -218,7 +221,7 @@ sub sign {
     # the handle is a wrapped private key, which for this library simply means
     # is the private key, encrypted using our own secret key.  We know the
     # handle will decrypt because is_knonwn_handle() already checked that.
-    my $private_key = $self->keypair->decrypt(decode_base64url($handle));
+    my $private_key = $self->key->decrypt(decode_base64url($handle));
     my $pkec = Crypt::PK::ECC->new;
     $pkec->import_key_raw($private_key, 'nistp256');
 
@@ -257,7 +260,7 @@ sub is_known_handle {
 
     $handle = decode_base64url($handle);
 
-    if (eval { $self->keypair->decrypt($handle); 1 }) {
+    if (eval { $self->key->decrypt($handle); 1 }) {
         return 1;
     }
     else {
