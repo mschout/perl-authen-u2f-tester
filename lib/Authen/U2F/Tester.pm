@@ -48,7 +48,7 @@ key, and a SSL X.509 certificate.  The key can be generated using OpenSSL:
 
 Then this key can be used to generate a self signed X.509 certificate:
 
- % openssl req -key key.pem -x509 -days 3560 -sh256 \
+ % openssl req -key key.pem -x509 -days 3560 -sha256 \
      -subj '/C=US/ST=Texas/O=Untrusted U2F Org/CN=virtual-u2f' \
      -out cert.pem
 
