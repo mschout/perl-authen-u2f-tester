@@ -20,9 +20,13 @@ Save the given keypair in the keystore, returning a unique key handle that
 uniquely identifies the keypair.  The returned handle should B<NOT> be Base64
 URL encoded.  C<$private_key> is a raw private key string.
 
+=method remove($handle): void
+
+Remove the given key handle from the key store.
+
 =cut
 
-requires qw(exists put get);
+requires qw(exists put get remove);
 
 1;
 

@@ -3,6 +3,7 @@
 use strictures 2;
 use Crypt::PK::ECC;
 use MIME::Base64 qw(encode_base64url);
+use Test::Exception;
 use Test::More;
 
 use_ok 'Authen::U2F::Tester::Keypair' or exit 1;
@@ -40,5 +41,7 @@ isa_ok $pk, 'Crypt::PK::ECC';
 my $ks_keypair = Authen::U2F::Tester::Keypair->new(keypair => $pk);
 
 is $ks_keypair->private_key, $keypair->private_key;
+
+dies_ok { $keystore->remove($handle) };
 
 done_testing;

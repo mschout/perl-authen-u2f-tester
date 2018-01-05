@@ -44,11 +44,16 @@ sub put {
     return $handle;
 }
 
+sub remove {
+    require Carp;
+    Carp::croak 'Keys cannot be removed from the Wrapped Keystore';
+}
+
 __PACKAGE__->meta->make_immutable;
 
 __END__
 
-=for Pod::Coverage exists get put
+=for Pod::Coverage exists get put remove
 
 =head1 SYNOPSIS
 
