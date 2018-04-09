@@ -249,14 +249,14 @@ sub sign {
     # generate the signature
     my $sign_data = pack 'a32 a N a32',
         sha256($app_id),            # 32 byte SHA256 application parameter
-        chr(0x00),                  # 1 byte user presence
+        chr(0x01),                  # 1 byte user presence
         $counter,                   # 4 byte counter
         sha256($client_data);       # 32 byte SHA256 of client data JSON
 
     my $signature = $pkec->sign_hash(sha256($sign_data));
 
     my $response = pack 'a N a*',
-        chr(0x00),
+        chr(0x01),
         $counter,
         $signature;
 

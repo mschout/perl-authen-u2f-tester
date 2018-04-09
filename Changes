@@ -1,6 +1,10 @@
 Revision history for Authen-U2F-Tester
 
 {{$NEXT}}
+    - Flip U2F sign response's "User Presence" byte to "1".  Previously this
+      was "0", meaning the user presence was not confirmed.  But Yubico's
+      libu2f-server lib requires that this is "1".  In order to be compatible
+      with libu2f-server we need to send the presence byte as 0x01. [github #2]
 
 0.02  2018-01-06
     - Rename tester keypair() accessor to key(). This is a bit less confusing as
