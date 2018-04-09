@@ -1,6 +1,8 @@
 Revision history for Authen-U2F-Tester
 
 {{$NEXT}}
+
+0.03  2018-04-09
     - Turn on sign() response's "User Presence" byte to "1".  Previously this
       was "0", meaning the user presence was not confirmed.  But Yubico's
       libu2f-server lib requires that this is "1".  In order to be compatible
