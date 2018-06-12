@@ -1,6 +1,7 @@
 Revision history for Authen-U2F-Tester
 
 {{$NEXT}}
+    - Replace use of base.pm with parent.pm
 
 0.03  2018-04-09
     - Turn on sign() response's "User Presence" byte to "1".  Previously this

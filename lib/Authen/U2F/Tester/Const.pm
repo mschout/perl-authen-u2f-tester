@@ -3,7 +3,7 @@ package Authen::U2F::Tester::Const;
 
 # ABSTRACT: Constants for Authen::U2F::Tester
 
-use base 'Exporter';
+use parent 'Exporter';
 use strictures 2;
 
 my %constants;
